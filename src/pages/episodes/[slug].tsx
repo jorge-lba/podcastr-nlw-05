@@ -64,8 +64,18 @@ export default function Episode({ episode }: EpisodeProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const episodes = await getDataPodcastDevHouse()  
+
+  const latestEpisodes = episodes.slice(0, 2) 
+  
+  const paths = latestEpisodes.map(episode => ({
+    params: {
+      slug: episode.id
+    }
+  }))
+
   return {
-    paths: [],
+    paths,
     fallback: 'blocking'
   }
 }
@@ -74,20 +84,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params
 
   const episodes = await getDataPodcastDevHouse()
-  const data = episodes.find(episode => episode.id === slug)
-   
-  const episode = {
-    id: data.id,
-    title: data.title,
-    thumbnail: data.thumbnail,
-    members: data.members,
-    publishedAt: format(parseISO(data.publishedAt), 'd MMM yy', { locale: ptBR }),
-    duration: Number(data.duration / 1000),
-    durationAsString: convertDurationTimeString(Number(data.duration )),
-    description: data.description,
-    url: data.url      
-  }
-
+  const episode = episodes.find(episode => episode.id === slug)
+ 
   return {
     props: {
       episode

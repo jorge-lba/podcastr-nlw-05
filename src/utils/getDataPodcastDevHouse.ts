@@ -1,6 +1,9 @@
 import convert from 'xml-js'
 import axios from 'axios'
-import { getuid } from 'node:process'
+import { format, parseISO } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+import { convertDurationTimeString } from '../utils/convertDurationToTimeString'
+
 
 type Episode = {
   id: string,
@@ -35,14 +38,17 @@ export const getDataPodcastDevHouse = async () => {
       .filter(member => member)
       .join(', ')
 
+    
+
     return {
       id: episode.guid._text,
       title: episode.title._cdata,
       thumbnail: episode['itunes:image']._attributes.href,
       members,
-      publishedAt,
-      duration: episode['itunes:duration']._text,
+      publishedAt: format(parseISO(publishedAt), 'd MMM yy', { locale: ptBR }),
+      duration: Number(episode['itunes:duration']._text / 1000),
       description,
+      durationAsString: convertDurationTimeString(Number(episode['itunes:duration']._text)),
       url: episode.enclosure._attributes.url
     }
   })

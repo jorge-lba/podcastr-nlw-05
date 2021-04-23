@@ -1,11 +1,6 @@
 import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { format, parseISO } from 'date-fns'
-import ptBR from 'date-fns/locale/pt-BR'
-
-import { api } from '../services/api'
-import { convertDurationTimeString } from '../utils/convertDurationToTimeString'
 
 import styles from './home.module.scss'
 import { getDataPodcastDevHouse } from '../utils/getDataPodcastDevHouse'
@@ -113,23 +108,10 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const data = await getDataPodcastDevHouse()
-
-  const episodes = data.map(episode => {
-    return {
-      id: episode.id,
-      title: episode.title,
-      thumbnail: episode.thumbnail,
-      members: episode.members,
-      publishedAt: format(parseISO(episode.publishedAt), 'd MMM yy', { locale: ptBR }),
-      duration: Number(episode.duration / 1000),
-      durationAsString: convertDurationTimeString(Number(episode.duration )),
-      url: episode.url       
-    }
-  })
+  const episodes = await getDataPodcastDevHouse()  
 
   const latestEpisodes = episodes.slice(0, 2)
-  const allEpisodes = episodes.slice(2, -1)
+  const allEpisodes = episodes.slice(2, episodes.length)
 
   return {
     props: {
