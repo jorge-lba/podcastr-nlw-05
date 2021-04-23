@@ -8,6 +8,7 @@ import { api } from '../services/api'
 import { convertDurationTimeString } from '../utils/convertDurationToTimeString'
 
 import styles from './home.module.scss'
+import { getDataPodcastDevHouse } from '../utils/getDataPodcastDevHouse'
 
 type Episode = {
   id: string,
@@ -47,7 +48,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <Link href={ `/episodes/${episode.id}` }>
                     <a >{ episode.title }</a>
                   </Link>
-                  <p>{ episode.members }</p>
+                  <p>{ episode.members.length > 30 ? `${episode.members.slice(0, 30)}...` : episode.members }</p>
                   <span>{ episode.publishedAt }</span>
                   <span>{ episode.durationAsString }</span>
                 </div>
@@ -93,7 +94,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                         <a>{episode.title}</a>
                       </Link>
                     </td>
-                    <td>{ episode.members }</td>
+                    <td>{ episode.members.length > 50 ? `${episode.members.slice(0, 50)}...` : episode.members }</td>
                     <td style={{width: 100}} >{ episode.publishedAt }</td>
                     <td>{ episode.durationAsString }</td>
                     <td>
@@ -112,13 +113,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await api.get('episodes', {
-    params: {
-      _limit: 12,
-      _sort: 'published_at',
-      _order: 'desc'
-    }
-  })
+  const data = await getDataPodcastDevHouse()
 
   const episodes = data.map(episode => {
     return {
@@ -126,10 +121,10 @@ export const getStaticProps: GetStaticProps = async () => {
       title: episode.title,
       thumbnail: episode.thumbnail,
       members: episode.members,
-      publishedAt: format(parseISO(episode.published_at), 'd MMM yy', { locale: ptBR }),
-      duration: Number(episode.file.duration),
-      durationAsString: convertDurationTimeString(Number(episode.file.duration)),
-      url: episode.file.url      
+      publishedAt: format(parseISO(episode.publishedAt), 'd MMM yy', { locale: ptBR }),
+      duration: Number(episode.duration / 1000),
+      durationAsString: convertDurationTimeString(Number(episode.duration )),
+      url: episode.url       
     }
   })
 

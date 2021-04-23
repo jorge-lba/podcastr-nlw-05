@@ -8,6 +8,7 @@ import { api } from '../../services/api'
 import { convertDurationTimeString } from '../../utils/convertDurationToTimeString'
 
 import styles from './episode.module.scss'
+import { getDataPodcastDevHouse } from '../../utils/getDataPodcastDevHouse'
 
 type Episode = {
   id: string,
@@ -48,7 +49,7 @@ export default function Episode({ episode }: EpisodeProps) {
 
         <header>
           <h1>{ episode.title }</h1>
-          <span>{ episode.members }</span>
+          <span>{ episode.members.length > 70 ? `${episode.members.slice(0, 70)}...` : episode.members }</span>
           <span>{ episode.publishedAt }</span>
           <span>{ episode.durationAsString }</span>
         </header>
@@ -71,19 +72,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params
-  
-  const { data } = await api.get(`/episodes/${slug}`)
 
+  const episodes = await getDataPodcastDevHouse()
+  const data = episodes.find(episode => episode.id === slug)
+   
   const episode = {
     id: data.id,
     title: data.title,
     thumbnail: data.thumbnail,
     members: data.members,
-    publishedAt: format(parseISO(data.published_at), 'd MMM yy', { locale: ptBR }),
-    duration: Number(data.file.duration),
-    durationAsString: convertDurationTimeString(Number(data.file.duration)),
+    publishedAt: format(parseISO(data.publishedAt), 'd MMM yy', { locale: ptBR }),
+    duration: Number(data.duration / 1000),
+    durationAsString: convertDurationTimeString(Number(data.duration )),
     description: data.description,
-    url: data.file.url      
+    url: data.url      
   }
 
   return {
