@@ -11,7 +11,9 @@ type EpisodeDTO = {
 type PlayerContextDTO = {
   episodeList: EpisodeDTO[]
   currentEpisodeIndex: number
+  isPlaying: boolean
   play: (episode: EpisodeDTO) => void
+  togglePlay: () => void
 } 
 
 export const PlayerContext = createContext({} as PlayerContextDTO)
