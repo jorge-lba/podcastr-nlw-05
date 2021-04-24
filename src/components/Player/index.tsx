@@ -22,7 +22,7 @@ export function Player(){
     if(!audioRef.current) return
 
     if(isPlaying){
-      audioRef.current.volume = .02
+      audioRef.current.volume = .2
       audioRef.current.play()
     } else {
       audioRef.current.pause()
