@@ -17,6 +17,7 @@ type PlayerContextDTO = {
   hasNext: boolean
   hasPrevious: boolean
   play: (episode: EpisodeDTO) => void
+  clearPlayerState: () => void
   playList: (list: EpisodeDTO[], index: number) => void
   playNext: () => void
   playPrevious: () => void
@@ -69,7 +70,7 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
     setIsPlaying(state)
   }
 
-  const hasNext = (currentEpisodeIndex + 1) < episodeList.length
+  const hasNext = isShuffling || (currentEpisodeIndex + 1) < episodeList.length
   const hasPrevious = currentEpisodeIndex > 0
 
   function playNext(){
@@ -80,6 +81,11 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
     } else if(hasNext){
       setCurrentEpisodeIndex(currentEpisodeIndex + 1)
     }
+  }
+
+  function clearPlayerState(){
+    setEpisodeList([])
+    setCurrentEpisodeIndex(0)
   }
 
   function playPrevious(){
@@ -95,6 +101,7 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
       isLooping,
       isShuffling,
       play,
+      clearPlayerState,
       playList,
       playNext,
       playPrevious,
