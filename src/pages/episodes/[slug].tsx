@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import Head from 'next/head'
 
 import styles from './episode.module.scss'
 import { getDataPodcastDevHouse } from '../../utils/getDataPodcastDevHouse'
@@ -27,6 +28,9 @@ export default function Episode({ episode }: EpisodeProps) {
   
   return (
     <div className={ styles.container }>
+      <Head>
+        <title>{episode.title} | Podcastr</title>
+      </Head>
       <div className={ styles.episode }>
       <div className={ styles.thumbnailContainer }>
         <Link href='/'>
