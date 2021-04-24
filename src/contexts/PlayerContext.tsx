@@ -14,6 +14,7 @@ type PlayerContextDTO = {
   isPlaying: boolean
   play: (episode: EpisodeDTO) => void
   togglePlay: () => void
+  setPlayingSate: (state:boolean) => void
 } 
 
 export const PlayerContext = createContext({} as PlayerContextDTO)
