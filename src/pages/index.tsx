@@ -4,8 +4,7 @@ import Link from 'next/link'
 
 import styles from './home.module.scss'
 import { getDataPodcastDevHouse } from '../utils/getDataPodcastDevHouse'
-import { useContext } from 'react'
-import { PlayerContext } from '../contexts/PlayerContext'
+import { usePlayer } from '../contexts/PlayerContext'
 
 type Episode = {
   id: string,
@@ -24,7 +23,7 @@ type HomeProps = {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
-  const { playList } = useContext(PlayerContext)
+  const { playList } = usePlayer()
 
   const episodeList = [...latestEpisodes, ...allEpisodes]
 
