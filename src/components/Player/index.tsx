@@ -86,6 +86,8 @@ export function Player(){
           <div className={styles.slider}>
             { episode ? (
               <Slider 
+                max={episode.duration}
+                value={progress}
                 trackStyle={{ backgroundColor: '#04d361' }}
                 railStyle={{backgroundColor: '#9f75ff'}}
                 handleStyle={{ borderColor: '#04d361', borderWidth: 4 }}
@@ -94,7 +96,7 @@ export function Player(){
               <div className={styles.emptySlider} />
             ) }
           </div>
-          <span>{ convertDurationTimeString(episode?.duration*1000) }</span>
+          <span>{ convertDurationTimeString(episode?.duration || 0) }</span>
         </div>
         
         {episode && (

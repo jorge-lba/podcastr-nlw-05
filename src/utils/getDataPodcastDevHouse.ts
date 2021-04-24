@@ -46,7 +46,7 @@ export const getDataPodcastDevHouse = async () => {
       thumbnail: episode['itunes:image']._attributes.href,
       members,
       publishedAt: format(parseISO(publishedAt), 'd MMM yy', { locale: ptBR }),
-      duration: Number(episode['itunes:duration']._text / 1000),
+      duration: Number(episode['itunes:duration']._text),
       description,
       durationAsString: convertDurationTimeString(Number(episode['itunes:duration']._text)),
       url: episode.enclosure._attributes.url
