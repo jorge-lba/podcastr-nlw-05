@@ -12,6 +12,8 @@ type PlayerContextDTO = {
   episodeList: EpisodeDTO[]
   currentEpisodeIndex: number
   isPlaying: boolean
+  isLooping: boolean
+  isShuffling: boolean
   hasNext: boolean
   hasPrevious: boolean
   play: (episode: EpisodeDTO) => void
@@ -19,6 +21,8 @@ type PlayerContextDTO = {
   playNext: () => void
   playPrevious: () => void
   togglePlay: () => void
+  toggleLoop: () => void
+  toggleShuffle: () => void
   setPlayingSate: (state:boolean) => void
 }
 
@@ -32,6 +36,10 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
   const [episodeList, setEpisodeList] = useState([])
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isLooping, setIsLooping] = useState(false)
+  const [isShuffling, setIsShuffling] = useState(false)
+
+
 
   function play(episode: EpisodeDTO){
     setEpisodeList([episode])
@@ -49,6 +57,14 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
     setIsPlaying(!isPlaying)
   }
 
+  function toggleLoop(){
+    setIsLooping(!isLooping)
+  }
+
+  function toggleShuffle(){
+    setIsShuffling(!isShuffling)
+  }
+
   function setPlayingSate(state: boolean) {
     setIsPlaying(state)
   }
@@ -57,11 +73,13 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
   const hasPrevious = currentEpisodeIndex > 0
 
   function playNext(){
-    const nextEpisodeIndex = currentEpisodeIndex + 1
+    if(isShuffling){
+      const nextRandomEpisodeIndex = Math.floor(Math.random() * episodeList.length)
 
-    if(hasNext) return
-
-    setCurrentEpisodeIndex(currentEpisodeIndex + 1)
+      setCurrentEpisodeIndex(nextRandomEpisodeIndex)
+    } else if(hasNext){
+      setCurrentEpisodeIndex(currentEpisodeIndex + 1)
+    }
   }
 
   function playPrevious(){
@@ -74,11 +92,15 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
       episodeList,
       currentEpisodeIndex,
       isPlaying,
+      isLooping,
+      isShuffling,
       play,
       playList,
       playNext,
       playPrevious,
       togglePlay,
+      toggleLoop,
+      toggleShuffle,
       setPlayingSate,
       hasNext,
       hasPrevious
