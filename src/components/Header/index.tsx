@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 import format from 'date-fns/format'
 import ptBr from 'date-fns/locale/pt-BR'
 
@@ -11,7 +13,11 @@ export function Header(){
 
   return(
     <header className={styles.headerContainer}>
-      <img src="/logo.svg" alt="Podcastr"/>
+      <Image 
+      height={"80px"}
+      width={"150px"}
+      src="/logo-dev-house.svg" 
+      alt="Dev House"/>
 
       <p>O melhor para você ouvir, sempre!</p>
 
