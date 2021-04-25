@@ -1,5 +1,5 @@
 .playerContainer {
-  padding: 3rem 4rem;
+  padding: 2rem 4rem;
   width: 26.5rem;
   height: 100vh;
 
@@ -37,6 +37,7 @@
 
   img {
     border-radius: 1.5rem;
+    height: 34vh;
   }
 
   strong {
@@ -134,6 +135,36 @@
       &:hover:not(:disabled) {
         filter: brightness(0.95);
       }
+    }
+  }
+}
+
+.volumeSlider {
+
+}
+
+.volumeController{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: .8rem;
+  margin-bottom: .8rem;
+  gap: 1.5rem;
+
+  button {
+    background: transparent;
+    border: 0;
+    font-size: 0;
+
+    transition: filter 0.2s;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.7);
     }
   }
 }

@@ -11,6 +11,7 @@ import { convertDurationTimeString } from '../../utils/convertDurationToTimeStri
 export function Player(){
   const audioRef = useRef<HTMLAudioElement>(null)
   const [ progress, setProgress ] = useState(0)
+  const [ volume, setVolume ] = useState(.5)
 
   const { 
     episodeList, 
@@ -18,9 +19,11 @@ export function Player(){
     isPlaying,
     isLooping,
     isShuffling,
+    isMuted,
     togglePlay,
     toggleLoop,
     toggleShuffle,
+    setMutedState,
     clearPlayerState,
     playNext,
     playPrevious,
@@ -51,11 +54,28 @@ export function Player(){
     setProgress(amount)
   }
 
+  function handleVolume(amount: number) {
+    amount = amount / 100
+    console.log(amount)
+    audioRef.current.volume = amount
+    setVolume(amount)
+  }
+
+  function handleMuted(){
+    setMutedState(true)
+    audioRef.current.volume = 0
+  }
+
+  function handleDismuted(){
+    setMutedState(false)
+    audioRef.current.volume = volume
+  }
+
   useEffect(() => {
     if(!audioRef.current) return
 
     if(isPlaying){
-      audioRef.current.volume = .2
+      audioRef.current.volume = volume
       audioRef.current.play()
     } else {
       audioRef.current.pause()
@@ -161,6 +181,34 @@ export function Player(){
           >
             <img src="/repeat.svg" alt="Repetir"/>
           </button>
+
+        </div>
+        <div className={styles.volumeController}>
+          { isMuted
+            ? <button 
+                type="button" 
+                disabled={!episode}
+                onClick={handleDismuted}
+              >
+                <img src="/volume_off.svg" alt="Embaralhar"/>
+              </button>
+            : <button 
+                type="button" 
+                disabled={!episode}
+                onClick={handleMuted}
+              >
+                <img src="/volume_up.svg" alt="Embaralhar"/>
+              </button>
+          }
+          <Slider 
+            min={0}
+            max={100}
+            value={volume * 100}
+            onChange={handleVolume}
+            trackStyle={{ backgroundColor: '#E6E8EB' }}
+            railStyle={{backgroundColor: '#9f75ff'}}
+            handleStyle={{ borderColor: '#E6E8EB', borderWidth: 4 }}
+          />
         </div>
       </footer>
     </div>

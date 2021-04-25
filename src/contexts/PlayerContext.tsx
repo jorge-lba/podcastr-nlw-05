@@ -14,6 +14,7 @@ type PlayerContextDTO = {
   isPlaying: boolean
   isLooping: boolean
   isShuffling: boolean
+  isMuted:boolean
   hasNext: boolean
   hasPrevious: boolean
   play: (episode: EpisodeDTO) => void
@@ -24,6 +25,7 @@ type PlayerContextDTO = {
   togglePlay: () => void
   toggleLoop: () => void
   toggleShuffle: () => void
+  setMutedState: (state:boolean) => void
   setPlayingSate: (state:boolean) => void
 }
 
@@ -39,6 +41,7 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isLooping, setIsLooping] = useState(false)
   const [isShuffling, setIsShuffling] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
 
 
 
@@ -64,6 +67,10 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
 
   function toggleShuffle(){
     setIsShuffling(!isShuffling)
+  }
+
+  function setMutedState(state: boolean){
+    setIsMuted(state)
   }
 
   function setPlayingSate(state: boolean) {
@@ -100,6 +107,7 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
       isPlaying,
       isLooping,
       isShuffling,
+      isMuted,
       play,
       clearPlayerState,
       playList,
@@ -108,6 +116,7 @@ export function PlayerContextProvider({children}: PlayerContextProviderProps) {
       togglePlay,
       toggleLoop,
       toggleShuffle,
+      setMutedState,
       setPlayingSate,
       hasNext,
       hasPrevious
