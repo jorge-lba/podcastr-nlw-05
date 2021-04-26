@@ -3,7 +3,10 @@
   width: 26.5rem;
   height: 100vh;
 
-  background: var(--ciano-900);
+  background: linear-gradient(127deg, var(--violet), rgba(255,0,0,0) 70.71%),
+            linear-gradient(336deg, var(--blue-magenta), rgba(0,255,0,0) 70.71%),
+            linear-gradient(217deg, var(--ciano), rgba(0,0,255,0) 70.71%);
+
   color: var(--white);
 
   display: flex;
@@ -61,7 +64,7 @@
   height: 20rem;
   border: 1.5px dashed var(--ciano-300);
   border-radius: 1.5rem;
-  background: linear-gradient(143.8deg, rgba(74, 201, 188, 0.8) 0%, rgba(0, 0, 0, 0,) 100% );
+  background: linear-gradient(143.8deg, rgba(74, 201, 188, 0.5) 0%, rgba(0, 0, 0, 0,) 100% );
 
   padding: 4rem;
   text-align: center;
@@ -130,10 +133,13 @@
       width: 4rem;
       height: 4rem;
       border-radius: 1rem;
-      background: var(--ciano-800);
+      background: linear-gradient(217deg, var(--violet), rgba(255,0,0,0) 80.71%),
+            linear-gradient(336deg, var(--blue-magenta), rgba(0,255,0,0) 80.71%),
+            linear-gradient(217deg, var(--ciano), rgba(0,0,255,0) 80.71%);
+
 
       &:hover:not(:disabled) {
-        filter: brightness(0.95);
+        filter: brightness(1.2);
       }
     }
   }

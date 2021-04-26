@@ -121,9 +121,9 @@ export function Player(){
                 max={episode.duration}
                 value={progress}
                 onChange={handleSeek}
-                trackStyle={{ backgroundColor: '#66faeb' }}
-                railStyle={{backgroundColor: '#4ac9bc'}}
-                handleStyle={{ borderColor: '#66faeb', borderWidth: 4 }}
+                trackStyle={{ backgroundColor: 'rgb(248, 107, 239, .7)' }}
+                railStyle={{backgroundColor: 'rgba(103, 255, 240, .25)'}}
+                handleStyle={{ borderColor: 'rgb(248, 107, 239, .7)', borderWidth: 4 }}
               />
             ) : (
               <div className={styles.emptySlider} />
@@ -204,7 +204,7 @@ export function Player(){
             value={volume * 100}
             onChange={handleVolume}
             trackStyle={{ backgroundColor: '#E6E8EB' }}
-            railStyle={{backgroundColor: '#4ac9bc'}}
+            railStyle={{backgroundColor: 'rgba(103, 255, 240, .25)'}}
             handleStyle={{ borderColor: '#E6E8EB', borderWidth: 4 }}
           />
         </div>
