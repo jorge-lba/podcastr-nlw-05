@@ -36,7 +36,6 @@ export function Player(){
     audioRef.current.currentTime = 0
 
     audioRef.current.addEventListener('timeupdate', () => {
-      console.log(audioRef.current.currentTime)
       setProgress(Math.floor(audioRef.current.currentTime))
     })
   }
@@ -56,7 +55,6 @@ export function Player(){
 
   function handleVolume(amount: number) {
     amount = amount / 100
-    console.log(amount)
     audioRef.current.volume = amount
     setVolume(amount)
   }

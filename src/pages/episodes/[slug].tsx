@@ -69,12 +69,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const episodes = await getDataPodcastDevHouse()  
 
   const latestEpisodes = episodes.slice(0, 2) 
+
   
-  const paths = latestEpisodes.map(episode => ({
-    params: {
-      slug: episode.id
+  const paths = latestEpisodes.map(episode => {
+    return {
+      params: {
+        slug: episode.id
+      }
     }
-  }))
+  })
 
   return {
     paths,
@@ -84,10 +87,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params
-
+  
   const episodes = await getDataPodcastDevHouse()
+  
   const episode = episodes.find(episode => episode.id === slug)
- 
+  
   return {
     props: {
       episode
