@@ -8,17 +8,8 @@ import styles from './home.module.scss'
 import { usePlayer } from '../contexts/PlayerContext'
 import { EpisodeMapper } from '../mappers/EpisodeMapper'
 import { IEpisodeDTO } from '../dtos/IEpisodeDTO'
+import { useEffect, useState } from 'react'
 
-type Episode = {
-  id: string,
-  title: string,
-  thumbnail: string,
-  members: string,
-  published_at: Date,
-  duration: number,
-  durationAsString: string,
-  url: string,
-}
 
 type HomeProps = {
   latestEpisodes: IEpisodeDTO[],
@@ -26,13 +17,49 @@ type HomeProps = {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  const [episodesInTable, setEpisodesInTable] = useState(allEpisodes)
+  const [episodeList, setEpisodeList] = useState(allEpisodes)
+  const [episodesPage, setEpisodesPage] = useState(2)
+  const [continueUpdateEpisodeList, setContinueUpdateEpisodeList] = useState(true)
+
   const { playList } = usePlayer()
 
-  const episodeList = [...latestEpisodes, ...allEpisodes]
+  useEffect(() => {
+    setEpisodeList([...latestEpisodes, ...episodesInTable])
+  }, [])
+
+
+  async function updateEpisodesList (e){
+    const element = e.target
+    const scrollHeightValueUpdate = (element.clientHeight/100)*150
+    
+    if(element.scrollHeight - element.scrollTop <= scrollHeightValueUpdate && continueUpdateEpisodeList){
+      setEpisodesPage(episodesPage + 1)
+
+
+      const response = await axios.get("https://api-devhouse-podcast.herokuapp.com/podcasts/episodes",{
+        params: {
+          page: episodesPage,
+          itemsByPage: 12
+        }
+      })
+      const episodes = response.data
+
+      if(episodes.length > 0 ){
+        
+        setEpisodesInTable([...episodesInTable, ...episodes])
+        setEpisodeList([...episodeList, ...episodes])
+
+      }else {
+        setContinueUpdateEpisodeList(false)
+      }
+
+    }
+  } 
 
 
   return (
-    <div className={styles.homepage}>
+    <div className={styles.homepage} onScroll={updateEpisodesList}>
       <Head>
         <title>Home | Podcastr</title>
       </Head>
@@ -87,9 +114,10 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              { allEpisodes.map((episodeValue, index) => {
+            <tbody id="episodes">
+              { episodesInTable.map((episodeValue, index) => {
                 const episode = EpisodeMapper({...episodeValue})
+                
                 return (
                   <tr key={episode._id}>
                     <td style={{width: 72}}>

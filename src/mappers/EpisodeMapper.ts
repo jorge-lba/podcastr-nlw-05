@@ -17,6 +17,7 @@ interface IEpisode {
 }
 
 const EpisodeMapper = (episode: IEpisodeDTO): IEpisode => {
+  // console.log(episode.published_at)
   const [year, month, day] = episode.published_at.split('T')[0].split('-')
  
   const published_at = format(new Date(Number(year), Number(month), Number(day)), 'd MMM yy', { locale: ptBR })
