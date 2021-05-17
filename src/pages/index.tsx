@@ -2,25 +2,27 @@ import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
+import axios from 'axios'
 
 import styles from './home.module.scss'
-import { getDataPodcastDevHouse } from '../utils/getDataPodcastDevHouse'
 import { usePlayer } from '../contexts/PlayerContext'
+import { EpisodeMapper } from '../mappers/EpisodeMapper'
+import { IEpisodeDTO } from '../dtos/IEpisodeDTO'
 
 type Episode = {
   id: string,
   title: string,
   thumbnail: string,
   members: string,
-  publishedAt: string,
+  published_at: Date,
   duration: number,
   durationAsString: string,
   url: string,
 }
 
 type HomeProps = {
-  latestEpisodes: Episode[],
-  allEpisodes: Episode[]
+  latestEpisodes: IEpisodeDTO[],
+  allEpisodes: IEpisodeDTO[]
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
@@ -39,9 +41,12 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
         <h2>Últimos lançamentos</h2>
 
         <ul>
-          { latestEpisodes.map((episode, index) => {
+          { latestEpisodes.map((episodeValue, index) => {
+            
+            const episode = EpisodeMapper({...episodeValue})
+            
             return (
-              <li key={ episode.id }>
+              <li key={ episode._id }>
                 <Image 
                   width={192} 
                   height={192} 
@@ -51,11 +56,11 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                 />
 
                 <div className={ styles.episodeDetails }>
-                  <Link href={ `/episodes/${episode.id}` }>
+                  <Link href={ `/episodes/${episode._id}` }>
                     <a >{ episode.title }</a>
                   </Link>
                   <p>{ episode.members.length > 30 ? `${episode.members.slice(0, 30)}...` : episode.members }</p>
-                  <span>{ episode.publishedAt }</span>
+                  <span>{ episode.published_at }</span>
                   <span>{ episode.durationAsString }</span>
                 </div>
 
@@ -83,9 +88,10 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
               </tr>
             </thead>
             <tbody>
-              { allEpisodes.map((episode, index) => {
+              { allEpisodes.map((episodeValue, index) => {
+                const episode = EpisodeMapper({...episodeValue})
                 return (
-                  <tr key={episode.id}>
+                  <tr key={episode._id}>
                     <td style={{width: 72}}>
                       <Image
                         width={120}
@@ -96,12 +102,12 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       />
                     </td>
                     <td>
-                      <Link href={ `/episodes/${episode.id}` }>
+                      <Link href={ `/episodes/${episode._id}` }>
                         <a>{episode.title}</a>
                       </Link>
                     </td>
                     <td>{ episode.members.length > 50 ? `${episode.members.slice(0, 50)}...` : episode.members }</td>
-                    <td style={{width: 100}} >{ episode.publishedAt }</td>
+                    <td style={{width: 100}} >{ episode.published_at }</td>
                     <td>{ episode.durationAsString }</td>
                     <td>
                       <button type="button" onClick={() => playList(episodeList, index + latestEpisodes.length)}>
@@ -119,7 +125,14 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const episodes = await getDataPodcastDevHouse()  
+  const response = await axios.get(process.env.API_DEV_HOUSE_URL,{
+    params: {
+      page: 1,
+      itemsByPage: 12
+    }
+  })
+
+  const episodes = response.data
 
   const latestEpisodes = episodes.slice(0, 2)
   const allEpisodes = episodes.slice(2, episodes.length)

@@ -118,7 +118,6 @@ export function Player(){
           <div className={styles.slider}>
             { episode ? (
               <Slider 
-                className={styles.episodeSlider}
                 max={episode.duration}
                 value={progress}
                 onChange={handleSeek}

@@ -6,6 +6,7 @@ import Head from 'next/head'
 import styles from './episode.module.scss'
 import { getDataPodcastDevHouse } from '../../utils/getDataPodcastDevHouse'
 import { usePlayer } from '../../contexts/PlayerContext'
+import axios from 'axios'
 
 type Episode = {
   id: string,
@@ -66,15 +67,22 @@ export default function Episode({ episode }: EpisodeProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const episodes = await getDataPodcastDevHouse()  
+  const response = await axios.get(process.env.API_DEV_HOUSE_URL,{
+    params: {
+      page: 1,
+      itemsByPage: 2
+    }
+  })
 
-  const latestEpisodes = episodes.slice(0, 2) 
+  const episodes = response.data
+
+  const latestEpisodes = episodes
 
   
   const paths = latestEpisodes.map(episode => {
     return {
       params: {
-        slug: episode.id
+        slug: episode._id
       }
     }
   })
@@ -88,9 +96,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params
   
-  const episodes = await getDataPodcastDevHouse()
+  const response = await axios.get(process.env.API_DEV_HOUSE_URL,{
+    params: {
+      page: 1,
+      itemsByPage: 16
+    }
+  })
+
+  const episodes = response.data
   
-  const episode = episodes.find(episode => episode.id === slug)
+  const episode = episodes.find(episode => episode._id === slug)
   
   return {
     props: {
