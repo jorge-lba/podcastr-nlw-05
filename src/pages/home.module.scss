@@ -175,6 +175,24 @@
 
 @media(max-width: 768px){
   .homepage{
+    padding: 0 1rem;
     height:calc( calc(100vh - 6.5rem) - 20vh);
+
+    tr th:nth-child(1),tr td:nth-child(1),
+    tr th:nth-child(3),tr td:nth-child(3){
+      display:none;
+    }
+
+    h2 {
+      margin-top: 1.5rem;
+      margin-bottom: .5rem;
+    }
+  }
+
+  .latestEpisodes {
+    ul {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
