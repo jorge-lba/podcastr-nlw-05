@@ -1,7 +1,16 @@
 .wrapper {
   display: flex;
+  flex-direction: row;
 
   main {
     flex: 1;
+  }
+}
+
+@media(max-width: 768px){
+  
+  .wrapper {
+    flex-direction: column;   
+    overflow: hidden;
   }
 }

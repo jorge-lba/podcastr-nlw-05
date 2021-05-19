@@ -172,3 +172,9 @@
     }
   }
 }
+
+@media(max-width: 768px){
+  .homepage{
+    height:calc( calc(100vh - 6.5rem) - 20vh);
+  }
+}

@@ -11,7 +11,7 @@ import { convertDurationTimeString } from '../../utils/convertDurationToTimeStri
 export function Player(){
   const audioRef = useRef<HTMLAudioElement>(null)
   const [ progress, setProgress ] = useState(0)
-  const [ volume, setVolume ] = useState(.5)
+  const [ volume, setVolume ] = useState(1)
 
   const { 
     episodeList, 
